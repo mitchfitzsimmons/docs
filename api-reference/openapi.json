@@ -1,94 +1,54 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
+    "title": "Quickli",
+    "description": "Quickli Integration",
     "license": {
       "name": "MIT"
     },
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
   "security": [
     {
-      "bearerAuth": []
+      "ApiKeyAuth": []
     }
   ],
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/calculations/serviceability": {
       "post": {
-        "description": "Creates a new plant in the store",
+        "summary": "Calculate Broker Serviceability",
         "requestBody": {
-          "description": "Plant to add to the store",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "type": "object",
+                "properties": {
+                  "inputs": {
+                    "$ref": "#/components/schemas/BrokerServiceabilityInputs"
+                  }
+                },
+                "required": [
+                  "inputs"
+                ]
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "servInputs": {
+                      "$ref": "#/components/schemas/ServInputs"
+                    },
+                    "servResponse": {
+                      "$ref": "#/components/schemas/ServResponse"
+                    }
+                  }
                 }
               }
             }
@@ -96,32 +56,74 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+    "/calculations/serviceability/quote": {
+      "post": {
+        "summary": "Create a Quote",
+        "description": "Creates a Serviceability Quote for users based on OwnHome calculations",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "inputs": {
+                    "$ref": "#/components/schemas/BrokerServiceabilityInputs"
+                  },
+                  "contactDetails": {
+                    "$ref": "#/components/schemas/ContactDetails"
+                  },
+                  "quickliScenarioQuote": {
+                    "type": "string"
+                  },
+                  "quoteDescription": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "inputs",
+                  "contactDetails",
+                  "quickliScenarioQuote"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceabilityQuoteResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calculations/serviceability/quote/{quoteId}/temp-link": {
+      "post": {
+        "summary": "Create a temp link to a quote",
+        "description": "Creates a Temporary Link to an already existing Serviceability Quote",
         "parameters": [
           {
-            "name": "id",
+            "name": "quoteId",
             "in": "path",
-            "description": "ID of plant to delete",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string",
+              "description": "The unique identifier of the quote"
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ServiceabilityQuoteResponse"
                 }
               }
             }
@@ -132,63 +134,618 @@
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "ServInputs": {
+        "type": "string",
+        "enum": [
+          "monthlyBnplImpact",
+          "monthlyCreditCardImpact",
+          "monthlyLoanRepayments",
+          "annualGrossRentalIncome",
+          "annualAssessableRentalIncome",
+          "monthlyMortgageImpact",
+          "annualTotalGrossIncomeExRental",
+          "monthlyNonHemExpenses",
+          "monthlyDeclaredHemExpenses",
+          "monthlyCalculatedHemExpenses",
+          "monthlyAssessedHemExpenses",
+          "annualPrimaryGrossEmploymentIncome",
+          "annualPrimaryGrossPostTaxEmploymentIncome",
+          "annualPrimaryNetEmploymentIncome",
+          "annualTotalPrimaryNetEmploymentIncome",
+          "annualPrimaryGrossBonusIncome",
+          "annualPrimaryAssessableBonusIncome",
+          "annualPrimaryGrossOtherIncome",
+          "annualPrimaryAssessableOtherIncome",
+          "annualSecondaryGrossEmploymentIncome",
+          "annualSecondaryGrossPostTaxEmploymentIncome",
+          "annualSecondaryNetEmploymentIncome",
+          "annualTotalSecondaryNetEmploymentIncome",
+          "annualSecondaryGrossBonusIncome",
+          "annualSecondaryAssessableBonusIncome",
+          "annualSecondaryGrossOtherIncome",
+          "annualSecondaryAssessableOtherIncome",
+          "totalMonthlyAssessableIncome",
+          "totalMonthlyExpensesLiabilities",
+          "totalMonthlyUncommittedIncome"
+        ]
+      },
+      "DerivedInputs": {
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
+          "quoteId": {
             "type": "string"
           },
-          "tag": {
-            "description": "Tag to specify the type",
+          "quoteUrl": {
             "type": "string"
+          },
+          "expiresAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "quoteId",
+          "quoteUrl",
+          "expiresAt"
+        ]
+      },
+      "ServiceabilityQuoteResponse": {
+        "type": "object",
+        "properties": {
+          "quoteId": {
+            "type": "string"
+          },
+          "quoteUrl": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "quoteId",
+          "quoteUrl",
+          "expiresAt"
+        ]
+      },
+      "ServResponse": {
+        "type": "object",
+        "properties": {
+          "maximumResult": {
+            "$ref": "#/components/schemas/BrokerServiceabilityResult"
+          },
+          "desiredResult": {
+            "$ref": "#/components/schemas/BrokerServiceabilityResult"
+          }
+        },
+        "required": [
+          "maximumResult"
+        ]
+      },
+      "BrokerServiceabilityResult": {
+        "type": "object",
+        "properties": {
+          "loanBreakdown": {
+            "$ref": "#/components/schemas/LoanBreakdown"
+          },
+          "repayments": {
+            "$ref": "#/components/schemas/RepaymentDetails"
+          },
+          "upfrontCosts": {
+            "$ref": "#/components/schemas/UpfrontCost"
+          },
+          "qualificationResult": {
+            "$ref": "#/components/schemas/BrokerQualificationResult"
+          },
+          "savingsContribution": {
+            "type": "number"
+          },
+          "savingsGap": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "loanBreakdown",
+          "repayments",
+          "upfrontCosts",
+          "savingsContribution"
+        ]
+      },
+      "UpfrontCost": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/UpfrontCostType"
+          },
+          "totalLvr": {
+            "type": "number"
+          },
+          "depositAmount": {
+            "type": "number"
+          },
+          "ldpFullPrice": {
+            "type": "number"
+          },
+          "lmiCost": {
+            "type": "number"
+          },
+          "stampDuty": {
+            "type": "number"
+          },
+          "foreignOwnershipFees": {
+            "type": "number"
+          },
+          "mortgageTransferFee": {
+            "type": "number"
+          },
+          "conveyancerCost": {
+            "type": "number"
+          },
+          "buildingPestStrataReportCost": {
+            "type": "number"
+          },
+          "totalUpfrontCost": {
+            "type": "number"
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
+      "UpfrontCostType": {
+        "type": "string",
+        "enum": [
+          "OwnHomeDepositBoostLoan",
+          "StandardBankLoan"
         ]
       },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+      "BrokerQualificationResult": {
         "type": "object",
         "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
+          "suburbClassification": {
+            "type": "string",
+            "enum": [
+              "MetroPlus",
+              "Approved",
+              "Conditional",
+              "NotApproved"
+            ]
           },
-          "message": {
+          "isWithinMaxPurchaseAmount": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RepaymentSection": {
+        "type": "object",
+        "properties": {
+          "actual": {
+            "$ref": "#components/schemas/RepaymentDetails"
+          },
+          "assessed": {
+            "$ref": "#components/schemas/RepaymentDetails"
+          },
+          "firstMortgageBufferRate": {
+            "type": "number"
+          },
+          "ownHomeMortgageBufferRate": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "actual",
+          "firstMortgageBufferRate",
+          "ownHomeMortgageBufferRate"
+        ]
+      },
+      "RepaymentDetails": {
+        "type": "object",
+        "properties": {
+          "firstMortgageInterestRate": {
+            "type": "number"
+          },
+          "firstMortgageDuration": {
+            "type": "number"
+          },
+          "firstMortgageMonthlyRepaymentAmount": {
+            "type": "number"
+          },
+          "ownHomeMortgageInterestRate": {
+            "type": "number"
+          },
+          "ownHomeMortgageDuration": {
+            "type": "number"
+          },
+          "ownHomeMortgageMonthlyRepaymentAmount": {
+            "type": "number"
+          },
+          "blendedInterestRate": {
+            "type": "number"
+          },
+          "totalMonthlyRepaymentAmount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "firstMortgageInterestRate",
+          "firstMortgageDuration",
+          "firstMortgageMonthlyRepaymentAmount",
+          "ownHomeMortgageInterestRate",
+          "ownHomeMortgageDuration",
+          "ownHomeMortgageMonthlyRepaymentAmount",
+          "totalMonthlyRepaymentAmount"
+        ]
+      },
+      "OwnhomeLDPBaseResult": {
+        "type": "object",
+        "properties": {
+          "ownerOccupiedLowDepositPremium": {
+            "type": "number"
+          },
+          "ownerOccupiedFloor": {
+            "type": "number"
+          },
+          "investmentLowDepositPremium": {
+            "type": "number"
+          },
+          "investmentFloor": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "ownerOccupiedLowDepositPremium",
+          "ownerOccupiedFloor",
+          "investmentLowDepositPremium",
+          "investmentFloor"
+        ]
+      },
+      "LoanBreakdown": {
+        "type": "object",
+        "properties": {
+          "firstMortgageAmount": {
+            "type": "number"
+          },
+          "firstMortgageLvr": {
+            "type": "number"
+          },
+          "ownHomeMortgageAmount": {
+            "type": "number"
+          },
+          "ownHomeMortgageLvr": {
+            "type": "number"
+          },
+          "customerContributionPercentage": {
+            "type": "number"
+          },
+          "customerContributionAmount": {
+            "type": "number"
+          },
+          "combinedFinanceAmount": {
+            "type": "number"
+          },
+          "purchasePrice": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "firstMortgageAmount",
+          "firstMortgageLvr",
+          "ownHomeMortgageAmount",
+          "ownHomeMortgageLvr",
+          "customerContributionPercentage",
+          "customerContributionAmount",
+          "combinedFinanceAmount",
+          "purchasePrice"
+        ]
+      },
+      "BrokerServiceabilityInputs": {
+        "type": "object",
+        "properties": {
+          "householdInfo": {
+            "$ref": "#/components/schemas/HouseholdInfo"
+          },
+          "proposedHomeLoans": {
+            "$ref": "#/components/schemas/ProposedHomeLoans"
+          },
+          "financials": {
+            "$ref": "#/components/schemas/Financials"
+          }
+        },
+        "required": [
+          "householdInfo",
+          "proposedHomeLoans",
+          "financials"
+        ]
+      },
+      "HouseholdInfo": {
+        "type": "object",
+        "properties": {
+          "isJointApplication": {
+            "type": "boolean"
+          },
+          "dependents": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "suburbUids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "isJointApplication",
+          "dependents"
+        ]
+      },
+      "ProposedHomeLoans": {
+        "type": "object",
+        "properties": {
+          "intendedUse": {
+            "type": "string",
+            "items": {
+              "$ref": "#/components/schemas/LoanPurpose"
+            }
+          },
+          "desiredPurchasePrice": {
+            "type": "number"
+          },
+          "isFirstHomeBuyer": {
+            "type": "boolean"
+          },
+          "isAusCitizenPermanentResident": {
+            "type": "boolean"
+          },
+          "state": {
+            "$ref": "#/components/schemas/State"
+          },
+          "savingsContribution": {
+            "type": "number"
+          },
+          "ownHomeLvr": {
+            "type": "number"
+          },
+          "firstMortgage": {
+            "$ref": "#components/schemas/ProposedHomeLoansFirstMortgage"
+          }
+        },
+        "required": [
+          "intendedUse",
+          "desiredPurchasePrice",
+          "isFirstHomeBuyer",
+          "isAusCitizenPermanentResident",
+          "state",
+          "firstMortgage"
+        ]
+      },
+      "Financials": {
+        "type": "object",
+        "properties": {
+          "primaryIncome": {
+            "$ref": "#components/schemas/Income"
+          },
+          "secondaryIncome": {
+            "$ref": "#components/schemas/Income"
+          },
+          "expenses": {
+            "$ref": "#/components/schemas/Expenses"
+          },
+          "liabilities": {
+            "$ref": "#/components/schemas/Liabilities"
+          }
+        },
+        "required": [
+          "primaryIncome",
+          "expenses",
+          "liabilities"
+        ]
+      },
+      "LoanPurpose": {
+        "type": "string",
+        "enum": [
+          "OwnerOccupied",
+          "Investment"
+        ]
+      },
+      "State": {
+        "type": "string",
+        "enum": [
+          "NSW",
+          "QLD",
+          "VIC",
+          "SA",
+          "WA",
+          "NT",
+          "ACT",
+          "TAS"
+        ]
+      },
+      "ProposedHomeLoansFirstMortgage": {
+        "type": "object",
+        "properties": {
+          "lvr": {
+            "type": "number"
+          },
+          "loanDuration": {
+            "type": "number"
+          },
+          "interestRate": {
+            "type": "number"
+          },
+          "bufferRate": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "lvr",
+          "loanDuration",
+          "interestRate",
+          "bufferRate"
+        ]
+      },
+      "ContactDetails": {
+        "type": "object",
+        "properties": {
+          "firstName": {
             "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "email",
+          "phoneNumber"
+        ]
+      },
+      "Income": {
+        "type": "object",
+        "properties": {
+          "basicIncome": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "bonusOrCommissionIncome": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "rentalIncome": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "otherIncome": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          }
+        },
+        "required": [
+          "basicIncome"
+        ]
+      },
+      "Expenses": {
+        "type": "object",
+        "properties": {
+          "clothingAndPersonalCare": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "generalInsurance": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "groceries": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "medicalAndHealth": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "primaryResidenceCosts": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "publicOrGovtEducation": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "recreationAndEntertainment": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "phoneInternetTVStreamingSubscriptions": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "transport": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "childcare": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "investmentPropertyCosts": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "privateOrNonGovtEducation": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "personalInsurance": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          },
+          "otherRegularAndRecurringExpenses": {
+            "type": "object",
+            "$ref": "#components/schemas/PeriodicAmount"
+          }
+        }
+      },
+      "PeriodicAmount": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "period": {
+            "$ref": "#/components/schemas/Period"
+          }
+        },
+        "required": [
+          "amount",
+          "period"
+        ]
+      },
+      "Period": {
+        "type": "string",
+        "enum": [
+          "Week",
+          "Fortnight",
+          "Month",
+          "Quarter",
+          "Year"
+        ]
+      },
+      "Liabilities": {
+        "type": "object",
+        "properties": {
+          "hasPrimaryHecs": {
+            "type": "boolean"
+          },
+          "hasSecondaryHecs": {
+            "type": "boolean"
+          },
+          "totalCreditCardLimit": {
+            "type": "number"
+          },
+          "personalLoan": {
+            "$ref": "#/components/schemas/PeriodicAmount"
+          },
+          "carLoan": {
+            "$ref": "#/components/schemas/PeriodicAmount"
+          },
+          "existingMortgage": {
+            "$ref": "#/components/schemas/PeriodicAmount"
+          },
+          "bnplAccountsLimit": {
+            "type": "number"
           }
         }
       }
     },
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
       }
     }
   }
