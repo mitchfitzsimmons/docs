@@ -1,0 +1,14 @@
+---
+title: Servicing Calculations
+description: Perform loan servicing calculations with OwnHome for your customers or brokers
+---
+
+<Tip>If the inputs provided are the exact same as what a broker puts into the servicing calculator in their Broker portal, it will be 100% accurate with the exact same details. The underlying system is the exact same.</Tip>
+
+OwnHome's Broker Serviceability Calculation API is a externally available tool integrated into our platform, designed to streamline calculations. With minimal information required – just basic household data and income details – you can quickly gauge a potential borrower's borrowing capacity with a OwnHome Deposit Boost Loan + any supporting 80% loan.
+
+The response will include; LVRs, loan amounts, interest rates (incl. blended interest rate), repayments, upfront costs associated with the maximum borrowing amount and purchase amount. It will also include any initial calculations (tax, haircuts, etc) to arrive at the uncommited income prior to the assessment.
+
+This API offers flexibility in determining the financial structure. You can either provide the total loan-to-value ratio (LVR) or the savings contribution, which intelligently splits the uncommitted income between the 80% loan and the deposit boost loan. The more deposit provided the higher the servicing amount. Using savings contribution will ensure that the savings will be able to cover all up-front costs associated plus any deposit amount.
+
+Furthermore, to give your clients a crystal-clear picture, input a desired purchase price and the API will generate a comprehensive breakdown of expected repayments and upfront costs for that specific purchase price. This empowers your clients with tangible figures, aiding them in making well-informed decisions in their property journey.

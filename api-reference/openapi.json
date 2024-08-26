@@ -135,39 +135,129 @@
   "components": {
     "schemas": {
       "ServInputs": {
-        "type": "string",
-        "enum": [
-          "monthlyBnplImpact",
-          "monthlyCreditCardImpact",
-          "monthlyLoanRepayments",
-          "annualGrossRentalIncome",
-          "annualAssessableRentalIncome",
-          "monthlyMortgageImpact",
-          "annualTotalGrossIncomeExRental",
-          "monthlyNonHemExpenses",
-          "monthlyDeclaredHemExpenses",
-          "monthlyCalculatedHemExpenses",
-          "monthlyAssessedHemExpenses",
-          "annualPrimaryGrossEmploymentIncome",
-          "annualPrimaryGrossPostTaxEmploymentIncome",
-          "annualPrimaryNetEmploymentIncome",
-          "annualTotalPrimaryNetEmploymentIncome",
-          "annualPrimaryGrossBonusIncome",
-          "annualPrimaryAssessableBonusIncome",
-          "annualPrimaryGrossOtherIncome",
-          "annualPrimaryAssessableOtherIncome",
-          "annualSecondaryGrossEmploymentIncome",
-          "annualSecondaryGrossPostTaxEmploymentIncome",
-          "annualSecondaryNetEmploymentIncome",
-          "annualTotalSecondaryNetEmploymentIncome",
-          "annualSecondaryGrossBonusIncome",
-          "annualSecondaryAssessableBonusIncome",
-          "annualSecondaryGrossOtherIncome",
-          "annualSecondaryAssessableOtherIncome",
-          "totalMonthlyAssessableIncome",
-          "totalMonthlyExpensesLiabilities",
-          "totalMonthlyUncommittedIncome"
-        ]
+        "type": "object",
+        "properties": {
+          "monthlyBnplImpact":
+          {
+              "type": "number"
+          },
+          "monthlyCreditCardImpact":
+          {
+              "type": "number"
+          },
+          "monthlyLoanRepayments":
+          {
+              "type": "number"
+          },
+          "annualGrossRentalIncome":
+          {
+              "type": "number"
+          },
+          "annualAssessableRentalIncome":
+          {
+              "type": "number"
+          },
+          "monthlyMortgageImpact":
+          {
+              "type": "number"
+          },
+          "annualTotalGrossIncomeExRental":
+          {
+              "type": "number"
+          },
+          "monthlyNonHemExpenses":
+          {
+              "type": "number"
+          },
+          "monthlyDeclaredHemExpenses":
+          {
+              "type": "number"
+          },
+          "monthlyCalculatedHemExpenses":
+          {
+              "type": "number"
+          },
+          "monthlyAssessedHemExpenses":
+          {
+              "type": "number"
+          },
+          "annualPrimaryGrossEmploymentIncome":
+          {
+              "type": "number"
+          },
+          "annualPrimaryGrossPostTaxEmploymentIncome":
+          {
+              "type": "number"
+          },
+          "annualPrimaryNetEmploymentIncome":
+          {
+              "type": "number"
+          },
+          "annualTotalPrimaryNetEmploymentIncome":
+          {
+              "type": "number"
+          },
+          "annualPrimaryGrossBonusIncome":
+          {
+              "type": "number"
+          },
+          "annualPrimaryAssessableBonusIncome":
+          {
+              "type": "number"
+          },
+          "annualPrimaryGrossOtherIncome":
+          {
+              "type": "number"
+          },
+          "annualPrimaryAssessableOtherIncome":
+          {
+              "type": "number"
+          },
+          "annualSecondaryGrossEmploymentIncome":
+          {
+              "type": "number"
+          },
+          "annualSecondaryGrossPostTaxEmploymentIncome":
+          {
+              "type": "number"
+          },
+          "annualSecondaryNetEmploymentIncome":
+          {
+              "type": "number"
+          },
+          "annualTotalSecondaryNetEmploymentIncome":
+          {
+              "type": "number"
+          },
+          "annualSecondaryGrossBonusIncome":
+          {
+              "type": "number"
+          },
+          "annualSecondaryAssessableBonusIncome":
+          {
+              "type": "number"
+          },
+          "annualSecondaryGrossOtherIncome":
+          {
+              "type": "number"
+          },
+          "annualSecondaryAssessableOtherIncome":
+          {
+              "type": "number"
+          },
+          "totalMonthlyAssessableIncome":
+          {
+              "type": "number"
+          },
+          "totalMonthlyExpensesLiabilities":
+          {
+              "type": "number"
+          },
+          "totalMonthlyUncommittedIncome":
+          {
+              "type": "number"
+          }
+        }
       },
       "DerivedInputs": {
         "type": "object",
@@ -315,10 +405,10 @@
         "type": "object",
         "properties": {
           "actual": {
-            "$ref": "#components/schemas/RepaymentDetails"
+            "$ref": "#/components/schemas/RepaymentDetails"
           },
           "assessed": {
-            "$ref": "#components/schemas/RepaymentDetails"
+            "$ref": "#/components/schemas/RepaymentDetails"
           },
           "firstMortgageBufferRate": {
             "type": "number"
@@ -504,7 +594,7 @@
             "type": "number"
           },
           "firstMortgage": {
-            "$ref": "#components/schemas/ProposedHomeLoansFirstMortgage"
+            "$ref": "#/components/schemas/ProposedHomeLoansFirstMortgage"
           }
         },
         "required": [
@@ -520,10 +610,10 @@
         "type": "object",
         "properties": {
           "primaryIncome": {
-            "$ref": "#components/schemas/Income"
+            "$ref": "#/components/schemas/Income"
           },
           "secondaryIncome": {
-            "$ref": "#components/schemas/Income"
+            "$ref": "#/components/schemas/Income"
           },
           "expenses": {
             "$ref": "#/components/schemas/Expenses"
@@ -609,19 +699,19 @@
         "properties": {
           "basicIncome": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "bonusOrCommissionIncome": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "rentalIncome": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "otherIncome": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           }
         },
         "required": [
@@ -633,59 +723,59 @@
         "properties": {
           "clothingAndPersonalCare": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "generalInsurance": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "groceries": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "medicalAndHealth": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "primaryResidenceCosts": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "publicOrGovtEducation": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "recreationAndEntertainment": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "phoneInternetTVStreamingSubscriptions": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "transport": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "childcare": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "investmentPropertyCosts": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "privateOrNonGovtEducation": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "personalInsurance": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           },
           "otherRegularAndRecurringExpenses": {
             "type": "object",
-            "$ref": "#components/schemas/PeriodicAmount"
+            "$ref": "#/components/schemas/PeriodicAmount"
           }
         }
       },

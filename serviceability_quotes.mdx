@@ -1,0 +1,19 @@
+---
+title: Servicing Quotes
+description: Get a quote URL to send your brokers, allowing them to continue their scenario exploration.
+---
+
+<Tip>If the inputs provided are the exact same as the servicing calculator API, it will then ensure the results from the API is what they will see in their broker portal from the quote.</Tip>
+
+OwnHome's Broker Servicing Quotes API takes interactions to the next level, offering a solution beyond basic calculations, but allowing a seamless experience for handoff. Building on the same foundational inputs as the Serviceability Calculation API – household details, income, LVR/savings contribution, and desired purchase price – this API incorporates contact information and a scenario description or external reference.
+
+By capturing these additional details, you ensure accurate attribution of scenarios and seamless referral tracking. 
+
+The API will return a unique quote UID for your reference, a shareable URL for your client to access their personalized quote, and the URL's expiry date to safeguard sensitive contact information.
+
+Once the user navigates to the quote page, there are three potential outcomes:
+1. If they are already logged into the OwnHome Broker Platform. Instantly redirects them to the servicing calculation page with all the same scenario details, this will instantly attribute this calculation to the quote.
+2. If they are not logged in (to OwnHome Broker platform), but the broker contact details provided match a broker in our database. It will take them to a landing page with high-level servicing information with a simple CTA to login.
+3. If there is not match in our DB based on the contact details provided. They will be taken to the same landing page, where there is a very simple signup for with all the details pre-filled based on the contact details provided in the quote. 
+
+There is an second API to effectively generate a new Quote URL if the existing URL has expired. All that will be needed is the quote UID. 

@@ -1,33 +1,46 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: Introduction
+description: API reference for connecting with OwnHome's APIs for Calculations.
 ---
-
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
-
-## Welcome
-
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
-
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All API endpoints are authenticated using tokens in the headers and should be provided by the OwnHome team. 
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+
+
 ```
+x-api-key: ${your_access_token}
+```
+
+## Conventions
+### Access
+
+Production API access is via https://api-v2.ownhome.com/api/ptr/quickli/v1
+
+UAT API access is via https://api.uat.non.ownhome.com/api/ptr/quickli/v1
+
+
+### Mobile Numbers
+We use full international format eg. `+61411222333`
+
+### Dates
+Dates/Time will usually include a timezone component, or be provided in UTC, unless noted otherwise (date-time in RFC3339).
+Example DateTime value representing 26th August, 2024 @ 4:30pm AEST
+
+`2024-08-26T06:30:00.000Z`
+
+### Numbers
+- All currency or dollar amounts are represented in cents. eg. $1,000,000 = `1_000_000_00`
+- Periodic amounts, such as income or repayments amounts are represented by the `PeriodicAmount` schema
+  ``` JSON
+  {
+    "period": string, // Week, Fortnight, Month, Quarter, Year
+    "amount": number,
+  }
+  ```
+- All fixed amounts eg. balance & limits are represented by a simple amount
+  ```JSON
+  "amount": number
+  ```
+- Percentages are represented as decimals eg. 80% = `0.8` or 6.19% = `0.0619`
