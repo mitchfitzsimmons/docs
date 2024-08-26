@@ -102,13 +102,13 @@
         }
       }
     },
-    "/calculations/serviceability/quote/{quoteId}/temp-link": {
+    "/calculations/serviceability/quote/{quoteUid}/temp-link": {
       "post": {
         "summary": "Create a temp link to a quote",
         "description": "Creates a Temporary Link to an already existing Serviceability Quote",
         "parameters": [
           {
-            "name": "quoteId",
+            "name": "quoteUid",
             "in": "path",
             "required": true,
             "schema": {
@@ -262,7 +262,7 @@
       "DerivedInputs": {
         "type": "object",
         "properties": {
-          "quoteId": {
+          "quoteUid": {
             "type": "string"
           },
           "quoteUrl": {
@@ -273,7 +273,7 @@
           }
         },
         "required": [
-          "quoteId",
+          "quoteUid",
           "quoteUrl",
           "expiresAt"
         ]
@@ -281,7 +281,7 @@
       "ServiceabilityQuoteResponse": {
         "type": "object",
         "properties": {
-          "quoteId": {
+          "quoteUid": {
             "type": "string"
           },
           "quoteUrl": {
@@ -292,7 +292,7 @@
           }
         },
         "required": [
-          "quoteId",
+          "quoteUid",
           "quoteUrl",
           "expiresAt"
         ]
