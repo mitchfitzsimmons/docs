@@ -578,6 +578,14 @@
           "desiredPurchasePrice": {
             "type": "number"
           },
+          "capitaliseLdp": {
+            "type": "boolean",
+            "optional": true
+          },
+          "noDepositBoostLoanRequired": { 
+            "type": "boolean",
+            "optional": true
+          },
           "isFirstHomeBuyer": {
             "type": "boolean"
           },
@@ -635,6 +643,13 @@
           "Investment"
         ]
       },
+      "RepaymentType": {
+        "type": "string",
+        "enum": [
+          "InterestOnly",
+          "PrincipalAndInterest"
+        ]
+      },
       "State": {
         "type": "string",
         "enum": [
@@ -651,6 +666,12 @@
       "ProposedHomeLoansFirstMortgage": {
         "type": "object",
         "properties": {
+          "repaymentType": {
+            "type": "string",
+            "items": {
+              "$ref": "#/components/schemas/RepaymentType"
+            }
+          },
           "lvr": {
             "type": "number"
           },
@@ -662,6 +683,14 @@
           },
           "bufferRate": {
             "type": "number"
+          },
+          "interestOnlyDurationYears": {
+            "type": "number",
+            "optional": true
+          },
+          "interestOnlyInterestRate": {
+            "type": "number",
+            "optional": true
           }
         },
         "required": [
