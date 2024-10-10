@@ -563,7 +563,8 @@
         },
         "required": [
           "isJointApplication",
-          "dependents"
+          "dependents",
+          "suburbUids"
         ]
       },
       "ProposedHomeLoans": {
@@ -592,9 +593,6 @@
           "isAusCitizenPermanentResident": {
             "type": "boolean"
           },
-          "state": {
-            "$ref": "#/components/schemas/State"
-          },
           "savingsContribution": {
             "type": "number"
           },
@@ -610,7 +608,6 @@
           "desiredPurchasePrice",
           "isFirstHomeBuyer",
           "isAusCitizenPermanentResident",
-          "state",
           "firstMortgage"
         ]
       },
